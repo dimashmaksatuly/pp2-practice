@@ -1,6 +1,6 @@
 import psycopg2
 import csv
-from config import params # Импортируем настройки из твоего файла config.py
+from config import params
 
 def create_table():
     query = """
