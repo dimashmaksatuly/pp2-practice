@@ -1,6 +1,6 @@
 import psycopg2
 import csv
-from config import params  # Импортируем параметры из твоего config.py
+from config import params
 
 def create_table():
     """Создает таблицу в базе данных, если её нет"""
