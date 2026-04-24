@@ -1,34 +1,30 @@
 import pygame
-from clock import Clock
+import sys
+from clock import MickeyClock
 
-pygame.init()
+def main():
+    pygame.init()
+    
+    # Square window to match the clock face
+    WIDTH, HEIGHT = 800, 800
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Mickey Mouse Clock")
+    
+    clock_app = MickeyClock(WIDTH, HEIGHT)
+    timer = pygame.time.Clock()
 
-WIDTH, HEIGHT = 600, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Clock")
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-clock = pygame.time.Clock()
+        clock_app.render(screen)
+        pygame.display.flip()
+        timer.tick(60)
 
+    pygame.quit()
+    sys.exit()
 
-second_hand = pygame.image.load("/Users/dimash/Desktop/pp2-practice/Practice9/mickeys_clock/images/second.png")
-minute_hand = pygame.image.load("/Users/dimash/Desktop/pp2-practice/Practice9/mickeys_clock/images/minute.png")
-
-second_hand = pygame.transform.scale(second_hand, (200, 200))
-minute_hand = pygame.transform.scale(minute_hand, (200, 200))
-
-clock_obj = Clock((WIDTH//2, HEIGHT//2), second_hand, minute_hand)
-
-running = True
-while running:
-    screen.fill((255, 255, 255))
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    clock_obj.draw(screen)
-
-    pygame.display.flip()
-    clock.tick(1)
-
-pygame.quit()
+if __name__ == "__main__":
+    main()
