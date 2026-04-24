@@ -4,27 +4,28 @@ from player import MusicPlayer
 pygame.init()
 pygame.mixer.init()
 
-screen = pygame.display.set_mode((600, 200))
+WIDTH, HEIGHT = 700, 300
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Music Player")
 
 font = pygame.font.Font(None, 36)
 
 playlist = [
-    "music_player/music/sample_tracks/track1.mp3",
-    "music_player/music/sample_tracks/track2.mp3"
+    ("/Users/dimash/Desktop/pp2-practice/Practice9/music_player/music/sample_tracks/track1", "Artist1 - Song 1"),
+    ("/Users/dimash/Desktop/pp2-practice/Practice9/music_player/music/sample_tracks/track2", "Artist2 - Song 2")
 ]
 
 player = MusicPlayer(playlist)
 
-def draw():
-    screen.fill((30, 30, 30))
-    text = font.render(f"Track: {player.get_current_track()}", True, (255, 255, 255))
-    screen.blit(text, (20, 80))
-    pygame.display.flip()
+clock = pygame.time.Clock()
+
+def draw_bar(x, y, width, height, progress):
+    pygame.draw.rect(screen, (80, 80, 80), (x, y, width, height))
+    pygame.draw.rect(screen, (0, 200, 0), (x, y, width * progress, height))
 
 running = True
 while running:
-    draw()
+    screen.fill((30, 30, 30))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -33,13 +34,23 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 player.play()
-            elif event.key == pygame.K_s:
+            if event.key == pygame.K_s:
                 player.stop()
-            elif event.key == pygame.K_n:
+            if event.key == pygame.K_n:
                 player.next()
-            elif event.key == pygame.K_b:
-                player.previous()
-            elif event.key == pygame.K_q:
-                running = False
+            if event.key == pygame.K_b:
+                player.prev()
+
+    title = font.render(player.get_title(), True, (255, 255, 255))
+    screen.blit(title, (20, 50))
+
+    # трекбар
+    pos = player.get_pos()
+    progress = min(pos / 10, 1)  # условная длина (10 сек)
+
+    draw_bar(20, 150, 600, 20, progress)
+
+    pygame.display.flip()
+    clock.tick(30)
 
 pygame.quit()

@@ -33,18 +33,20 @@ def remove_contact(target):
 
 if __name__ == "__main__":
     # 1. Тест вставки/обновления
-    add_or_update("Dimash", "77071112233")
+    add_or_update("Dimash", "7777777777")
     
     # 2. Тест поиска
-    print("Search Result:", find_contacts("Dim"))
+    print("Search Result:", find_contacts("j"))
     
     # 3. Тест массовой вставки
-    names_list = ["Alice", "Bob", "Charlie"]
-    phones_list = ["7015554433", "7026665544", "123"] 
+    names_list = ["John", "Jade", "Robert"]
+    phones_list = ["7015554489", "7026665590", "abc"] 
     insert_many(names_list, phones_list)
     
     # 4. Тест пагинации 
-    print("Page 1:", get_page(2, 0))
+    print("Page 1:", get_page(2, 2))
     
     # 5. Тест удаления
-    remove_contact("Alice")
+    #remove_contact("Alice")
+
+    #add_or_update("Name", "88887777")

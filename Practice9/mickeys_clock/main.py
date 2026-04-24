@@ -1,18 +1,22 @@
 import pygame
-from clock import MickeyClock
+from clock import Clock
 
 pygame.init()
 
 WIDTH, HEIGHT = 600, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Mickey Clock")
+pygame.display.set_caption("Clock")
 
 clock = pygame.time.Clock()
 
-image = pygame.image.load("mickeys_clock/images/mickey_hand.png")
-image = pygame.transform.scale(image, (200, 200))
 
-mickey = MickeyClock((WIDTH//2, HEIGHT//2), image)
+second_hand = pygame.image.load("/Users/dimash/Desktop/pp2-practice/Practice9/mickeys_clock/images/second.png")
+minute_hand = pygame.image.load("/Users/dimash/Desktop/pp2-practice/Practice9/mickeys_clock/images/minute.png")
+
+second_hand = pygame.transform.scale(second_hand, (200, 200))
+minute_hand = pygame.transform.scale(minute_hand, (200, 200))
+
+clock_obj = Clock((WIDTH//2, HEIGHT//2), second_hand, minute_hand)
 
 running = True
 while running:
@@ -22,7 +26,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    mickey.draw(screen)
+    clock_obj.draw(screen)
 
     pygame.display.flip()
     clock.tick(1)

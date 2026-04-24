@@ -5,21 +5,30 @@ class MusicPlayer:
     def __init__(self, playlist):
         self.playlist = playlist
         self.current = 0
+        self.is_playing = False
+
+    def load(self):
+        pygame.mixer.music.load(self.playlist[self.current][0])
 
     def play(self):
-        pygame.mixer.music.load(self.playlist[self.current])
+        self.load()
         pygame.mixer.music.play()
+        self.is_playing = True
 
     def stop(self):
         pygame.mixer.music.stop()
+        self.is_playing = False
 
     def next(self):
         self.current = (self.current + 1) % len(self.playlist)
         self.play()
 
-    def previous(self):
+    def prev(self):
         self.current = (self.current - 1) % len(self.playlist)
         self.play()
 
-    def get_current_track(self):
-        return os.path.basename(self.playlist[self.current])
+    def get_title(self):
+        return self.playlist[self.current][1]
+
+    def get_pos(self):
+        return pygame.mixer.music.get_pos() / 1000  # seconds

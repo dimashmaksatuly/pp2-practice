@@ -1,36 +1,35 @@
 import re
 import json
 
-with open("raw.txt", "r", encoding="utf-8") as file:
-    text = file.read()
+with open("raw.txt", encoding="utf-8") as f:
+   text = f.read()
 
-prices = re.findall(r"\d[\d\s]*,\d{2}", text)
+is_duplicate = "ДУБЛИКАТ" in text
 
-clean_prices = []
-for price in prices:
-    p = price.replace(" ", "").replace(",", ".")
-    clean_prices.append(float(p))
+products = re.findall(r"\d+\.\n(.+?)\n\d", text, re.DOTALL)
 
-date_match = re.search(r"\d{2}\.\d{2}\.\d{4}", text)
-date = date_match.group() if date_match else "Not found"
+prices_raw = re.findall(r"Стоимость\n([\d\s,]+)\n", text)
 
-time_match = re.search(r"\d{2}:\d{2}:\d{2}", text)
-time = time_match.group() if time_match else "Not found"
+prices = [float(p.replace(" ", "").replace(",", ".")) for p in prices_raw]
 
-payment_match = re.search(r"Банковская карта", text)
-payment_method = "Bank card" if payment_match else "Not found"
+total_match = re.search(r"ИТОГО:\n([\d\s,]+)", text)
+total = None
+if total_match:
+   total = float(total_match.group(1).replace(" ", "").replace(",", "."))
 
-products = re.findall(r"\d+\.\n(.+)", text)
+datetime_match = re.search(r"Время:\s(.+)", text)
+datetime_value = datetime_match.group(1) if datetime_match else None
 
-total = sum(clean_prices)
+payment_match = re.search(r"(Банковская карта|Наличные)", text)
+payment_method = payment_match.group(1) if payment_match else None
 
-receipt_data = {
-    "date": date,
-    "time": time,
-    "payment_method": payment_method,
-    "total_calculated": total,
-    "products": products,
-    "prices": clean_prices
+data = {
+   "is_duplicate": is_duplicate,
+   "products": products,
+   "prices": prices,
+   "total": total,
+   "datetime": datetime_value,
+   "payment_method": payment_method
 }
 
-print(json.dumps(receipt_data, indent=4, ensure_ascii=False))
+print(json.dumps(data, ensure_ascii=False, indent=4))
